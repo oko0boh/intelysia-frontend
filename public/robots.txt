@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://intelysia.com/sitemap.xml
+
+# Disallow admin and private areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+
+# Allow important pages for SEO
+Allow: /
+Allow: /category/
+Allow: /location/
+Allow: /business/
+Allow: /blog/
+Allow: /search
+Allow: /about
+
+# Crawl delay (optional)
+Crawl-delay: 1
