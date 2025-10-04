@@ -4,13 +4,106 @@
   "outputDirectory": "dist",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
+  "redirects": [
+    {
+      "source": "/article/:slug",
+      "destination": "/articles/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/articles",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/businesses",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/directory",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/categories",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/cat/:category",
+      "destination": "/category/:category",
+      "permanent": true
+    },
+    {
+      "source": "/locations",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/cotonou",
+      "destination": "/location/cotonou",
+      "permanent": true
+    },
+    {
+      "source": "/abomey",
+      "destination": "/location/abomey",
+      "permanent": true
+    },
+    {
+      "source": "/porto-novo",
+      "destination": "/location/porto-novo",
+      "permanent": true
+    },
+    {
+      "source": "/search/restaurants",
+      "destination": "/category/Restaurants",
+      "permanent": true
+    },
+    {
+      "source": "/search/hotels",
+      "destination": "/category/Hotels",
+      "permanent": true
+    },
+    {
+      "source": "/search/services",
+      "destination": "/category/Services",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    },
+    {
+      "source": "/articles/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
     {
       "source": "/data/(.*)",
       "headers": [
@@ -22,6 +115,15 @@
     },
     {
       "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|webp))",
       "headers": [
         {
           "key": "Cache-Control",

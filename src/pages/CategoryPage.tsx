@@ -212,6 +212,13 @@ const CategoryPage: React.FC = () => {
       
       setFilteredBusinesses(finalBusinesses);
       setCurrentPage(pageParam);
+    }).catch(error => {
+      console.error('Error loading category businesses:', error);
+      // Fallback to regular category filtering
+      const categoryBusinesses = businesses.filter(business => 
+        business.category.toLowerCase() === category.toLowerCase()
+      );
+      setFilteredBusinesses(categoryBusinesses);
     });
     
     // Reset to page 1 when filters change

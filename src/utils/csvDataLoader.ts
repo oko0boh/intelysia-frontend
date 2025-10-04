@@ -206,7 +206,16 @@ export const processCSVBusiness = (csvBusiness: CSVBusiness, index: number): Pro
     const query = (business.query || '').toLowerCase();
     const address = (business.address || '').toLowerCase();
     
-    // Entertainment & Recreation - Check FIRST (before restaurants)
+    // Food & Restaurants - Check FIRST to prioritize actual restaurant types
+    if (types.includes('food') || types.includes('restaurant') || types.includes('meal_takeaway') ||
+        (name.includes('restaurant') && !name.includes('bar')) || 
+        (name.includes('food') && !name.includes('bar')) || name.includes('cuisine') ||
+        (query.includes('restaurant') && !query.includes('bar')) || 
+        (query.includes('food') && !query.includes('bar'))) {
+      return 'Restaurants';
+    }
+    
+    // Entertainment & Recreation - Check AFTER restaurants to avoid miscategorization
     if (types.includes('bar') || types.includes('night_club') || types.includes('amusement') || 
         types.includes('entertainment') || types.includes('movie_theater') || types.includes('gym') ||
         types.includes('bowling_alley') || types.includes('casino') || types.includes('stadium') ||
@@ -222,15 +231,6 @@ export const processCSVBusiness = (csvBusiness: CSVBusiness, index: number): Pro
         name.includes('sport') || name.includes('game') || name.includes('fun') || name.includes('leisure') ||
         name.includes('maquis') || name.includes('buvette') || name.includes('espace')) {
       return 'Entertainment';
-    }
-    
-    // Food & Restaurants (after entertainment check)
-    if (types.includes('food') || types.includes('restaurant') || types.includes('meal_takeaway') ||
-        (name.includes('restaurant') && !name.includes('bar')) || 
-        (name.includes('food') && !name.includes('bar')) || name.includes('cuisine') ||
-        (query.includes('restaurant') && !query.includes('bar')) || 
-        (query.includes('food') && !query.includes('bar'))) {
-      return 'Restaurants';
     }
     
     // Hotels & Accommodation

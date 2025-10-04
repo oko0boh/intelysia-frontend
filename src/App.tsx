@@ -32,6 +32,7 @@ export function App() {
           <Header />
           <main className="flex-grow">
             <Routes>
+              {/* English routes */}
               <Route path="/" element={<HomePage />} />
               <Route path="/business/:id" element={<BusinessDetailPage />} />
               <Route path="/business/:id/:slug" element={<BusinessDetailPage />} />
@@ -49,6 +50,21 @@ export function App() {
               <Route path="/business-dashboard" element={<BusinessOwnerDashboard />} />
               <Route path="/admin/bulk-import" element={<AdminBulkImportPage />} />
               <Route path="/admin/email-setup" element={<EmailSetupPage />} />
+              
+              {/* French routes - mirror structure with /fr/ prefix */}
+              <Route path="/fr" element={<HomePage />} />
+              <Route path="/fr/business/:id" element={<BusinessDetailPage />} />
+              <Route path="/fr/business/:id/:slug" element={<BusinessDetailPage />} />
+              <Route path="/fr/category/:category" element={<CategoryPage />} />
+              <Route path="/fr/location/:location" element={<LocationPage />} />
+              <Route path="/fr/search" element={<SearchPage />} />
+              <Route path="/fr/blog" element={<BlogPage />} />
+              <Route path="/fr/blog/:slug" element={<BlogPostPage />} />
+              <Route path="/fr/articles/:slug" element={<ArticlePage />} />
+              <Route path="/fr/about" element={<AboutPage />} />
+              <Route path="/fr/claim-business" element={<ClaimBusinessPage />} />
+              <Route path="/fr/register-business" element={<RegisterBusinessPage />} />
+              <Route path="/fr/business-dashboard" element={<BusinessOwnerDashboard />} />
             </Routes>
           </main>
           <Footer />

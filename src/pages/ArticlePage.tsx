@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import SEOHead from '../components/SEO/SEOHead';
+import SchemaGenerator, { BreadcrumbItem, FAQItem } from '../components/SEO/SchemaGenerator';
 import { useRealBusinessData } from '../hooks/useRealBusinessData';
 import { generateRestaurantArticle, generateCategoryArticle, generateLeadiciousCafeArticle, generateAutomotiveBusinessArticle } from '../utils/seoContentGenerator';
 import { ProcessedBusiness } from '../utils/csvDataLoader';
@@ -2444,6 +2445,29 @@ ${city ? allBusinesses.filter(b => b.address.toLowerCase().includes(city.toLower
     );
   }
 
+  // Generate breadcrumbs for schema
+  const breadcrumbs: BreadcrumbItem[] = [
+    { name: 'Home', url: '/' },
+    { name: 'Articles', url: '/blog' },
+    { name: article.title, url: `/articles/${slug}` }
+  ];
+
+  // Generate FAQs for schema (sample - can be made dynamic)
+  const faqs: FAQItem[] = [
+    {
+      question: `What are the best ${article.title.toLowerCase().includes('restaurant') ? 'restaurants' : 'businesses'} in this area?`,
+      answer: `Our comprehensive guide features the top-rated ${article.title.toLowerCase().includes('restaurant') ? 'restaurants' : 'businesses'} with verified reviews, contact information, and detailed descriptions to help you make the best choice.`
+    },
+    {
+      question: 'How are these businesses selected?',
+      answer: 'We select businesses based on customer ratings, reviews, service quality, and local reputation to ensure you get the best recommendations.'
+    },
+    {
+      question: 'Can I contact these businesses directly?',
+      answer: 'Yes, we provide complete contact information including phone numbers, addresses, and websites for all listed businesses.'
+    }
+  ];
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <SEOHead
@@ -2452,7 +2476,23 @@ ${city ? allBusinesses.filter(b => b.address.toLowerCase().includes(city.toLower
         keywords={article.keywords}
         canonicalUrl={`https://intelysia.com/articles/${slug}`}
         structuredData={article.structuredData}
+        hreflang={{
+          'en': `https://intelysia.com/articles/${slug}`,
+          'fr': `https://intelysia.com/fr/articles/${slug}`,
+          'x-default': `https://intelysia.com/articles/${slug}`
+        }}
       />
+      
+      {/* Schema Markup */}
+      <SchemaGenerator 
+        type="BreadcrumbList" 
+        breadcrumbs={breadcrumbs} 
+      />
+      <SchemaGenerator 
+        type="FAQPage" 
+        faqs={faqs} 
+      />
+      {/* ItemList schema will be added when we have the businesses data */}
       
       {/* Article Header */}
       <section className="bg-white py-12 px-4 border-b">

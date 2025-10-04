@@ -9,6 +9,8 @@ interface SEOHeadProps {
   ogImage?: string;
   structuredData?: object;
   noIndex?: boolean;
+  hreflang?: { [key: string]: string };
+  language?: 'en' | 'fr';
 }
 
 const SEOHead: React.FC<SEOHeadProps> = ({
@@ -18,7 +20,9 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   canonicalUrl,
   ogImage = '/og-image.jpg',
   structuredData,
-  noIndex = false
+  noIndex = false,
+  hreflang = {},
+  language = 'en'
 }) => {
   const fullTitle = title.includes('Intelysia') ? title : `${title} | Intelysia - Cotonou Business Directory`;
   
@@ -30,9 +34,15 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="description" content={description} />
       {keywords && <meta name="keywords" content={keywords} />}
       <meta name="robots" content={noIndex ? 'noindex, nofollow' : 'index, follow'} />
+      <html lang={language} />
       
       {/* Canonical URL */}
       {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+      
+      {/* Hreflang for internationalization */}
+      {Object.entries(hreflang).map(([lang, url]) => (
+        <link key={lang} rel="alternate" hrefLang={lang} href={url} />
+      ))}
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content="website" />

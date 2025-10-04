@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Search } from 'lucide-react';
+import LanguageSwitcher from '../common/LanguageSwitcher';
+import { t, getLanguageFromPath } from '../../i18n';
 
 const Header: React.FC = () => {
+  const location = useLocation();
+  const currentLanguage = getLanguageFromPath(location.pathname);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
@@ -177,14 +181,15 @@ const Header: React.FC = () => {
           </nav>
           {/* Action Buttons */}
           <div className="hidden md:flex items-center space-x-4">
+            <LanguageSwitcher />
             <button onClick={() => setIsSearchOpen(!isSearchOpen)} className="p-2 rounded-full hover:bg-gray-100" aria-label="Search">
               <Search className="h-5 w-5 text-gray-600" />
             </button>
             <Link to="/register-business" className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700 transition">
-              Add Business
+              {t('nav.addBusiness', currentLanguage)}
             </Link>
             <Link to="/claim-business" className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition">
-              Claim Business
+              {t('nav.claimBusiness', currentLanguage)}
             </Link>
           </div>
           {/* Mobile Menu Button */}
