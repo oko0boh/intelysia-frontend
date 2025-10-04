@@ -35,10 +35,17 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-blue-600">Intelysia</span>
-            <span className="ml-1 text-sm text-gray-600">
-              Cotonou Business Directory
-            </span>
+            <img 
+              src="/intelysia-logo.png" 
+              alt="Intelysia - Benin Republic Local Business Directory" 
+              className="h-12 w-auto mr-2"
+            />
+            <div className="hidden sm:block">
+              <span className="text-xl font-bold text-gray-800">Intelysia</span>
+              <div className="text-xs text-gray-600">
+                Benin Republic Local Business Directory
+              </div>
+            </div>
           </Link>
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import SEOHead from '../components/SEO/SEOHead';
+import VoiceSearchOptimizer from '../components/SEO/VoiceSearchOptimizer';
 import BusinessGrid from '../components/home/BusinessGrid';
 import { useRealBusinessData } from '../hooks/useRealBusinessData';
 import { generateCategoryArticle } from '../utils/seoContentGenerator';
 import { ProcessedBusiness, getUniqueCities } from '../utils/csvDataLoader';
 import { getCategoryContent, getCategoryKeywords } from '../utils/categoryContent';
+import { generateAIOptimizedBusinessSchema, generateSearchResultSchema } from '../utils/aiSearchOptimization';
 import { MapPin, Filter, ChevronLeft, ChevronRight, Info, CheckCircle, Star } from 'lucide-react';
 
 const CategoryPage: React.FC = () => {
@@ -407,6 +409,13 @@ const CategoryPage: React.FC = () => {
 
   const seoData = generateAdvancedSEO();
 
+  // Generate AI search optimization schemas
+  const searchResultSchema = generateSearchResultSchema(
+    filteredBusinesses,
+    `${category} businesses in ${selectedLocation === 'all' ? 'Benin Republic' : selectedLocation}`,
+    filteredBusinesses.length
+  );
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <SEOHead
@@ -415,6 +424,19 @@ const CategoryPage: React.FC = () => {
         keywords={seoData.keywords}
         canonicalUrl={`https://intelysia.com/category/${category}${locationParam !== 'all' ? `?location=${locationParam}` : ''}${currentPage > 1 ? `${locationParam !== 'all' ? '&' : '?'}page=${currentPage}` : ''}`}
         structuredData={seoData.structuredData}
+        type="business"
+        section={category}
+        tags={[category || '', selectedLocation !== 'all' ? selectedLocation : 'Benin Republic', 'business directory', 'local services']}
+      />
+      
+      {/* AI Search & Voice Search Optimization */}
+      <VoiceSearchOptimizer
+        businesses={filteredBusinesses}
+        category={category || 'Business'}
+        location={selectedLocation === 'all' ? 'Cotonou' : selectedLocation}
+        searchQuery={`${category} in ${selectedLocation === 'all' ? 'Benin Republic' : selectedLocation}`}
+        primaryQuestion={`What are the best ${category?.toLowerCase()} in ${selectedLocation === 'all' ? 'Cotonou, Benin' : selectedLocation}?`}
+        primaryAnswer={`The top ${category?.toLowerCase()} in ${selectedLocation === 'all' ? 'Cotonou, Benin' : selectedLocation} include ${filteredBusinesses.slice(0, 3).map(b => b.name).join(', ')}. These businesses offer excellent services with verified contact information and customer reviews.`}
       />
       
       {/* Hero Section */}

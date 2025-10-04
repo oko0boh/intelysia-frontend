@@ -32,24 +32,205 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://intelysia.com/" />
     
-    <!-- Structured Data for Local Business Directory -->
+    <!-- Enhanced Structured Data for AI Search Engines -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Intelysia",
-      "description": "Cotonou Business Directory - Find Local Businesses in Benin",
-      "url": "https://intelysia.com",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://intelysia.com/search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
+      "@type": ["WebSite", "LocalBusiness"],
+      "name": "Intelysia - Benin Republic Local Business Directory",
+      "alternateName": "Intelysia",
+      "description": "Discover the best businesses in Cotonou, Benin. Find restaurants, shops, services, and more in your local area. Connect with trusted local businesses today.",
+      "url": "https://www.intelysia.com",
+      "logo": "https://www.intelysia.com/intelysia-logo.png",
+      "image": "https://www.intelysia.com/og-image.jpg",
+      "telephone": "+229 0148656640",
+      "email": "intelysiaapp@gmail.com",
+      "foundingDate": "2024",
+      "foundingLocation": {
+        "@type": "Place",
+        "name": "Cotonou, Benin Republic"
       },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Cotonou",
+        "addressRegion": "Littoral",
+        "addressCountry": "BJ",
+        "addressCountryCode": "BJ"
+      },
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "Benin Republic",
+          "sameAs": "https://en.wikipedia.org/wiki/Benin"
+        },
+        {
+          "@type": "State",
+          "name": "Littoral Department",
+          "containedIn": "Benin Republic"
+        },
+        {
+          "@type": "City", 
+          "name": "Cotonou",
+          "sameAs": "https://en.wikipedia.org/wiki/Cotonou"
+        }
+      ],
+      "serviceType": [
+        "Business Directory",
+        "Local Business Listings",
+        "Business Information Services",
+        "Commercial Directory Services"
+      ],
+      "knowsAbout": [
+        "Cotonou Businesses",
+        "Benin Republic Commerce",
+        "Local Services Directory",
+        "West African Business Network",
+        "Restaurant Directory Cotonou",
+        "Professional Services Benin",
+        "Shopping Directory Cotonou",
+        "Healthcare Services Benin"
+      ],
+      "potentialAction": [
+        {
+          "@type": "SearchAction",
+          "target": "https://www.intelysia.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
+        {
+          "@type": "FindAction",
+          "target": "https://www.intelysia.com/category/{category_name}",
+          "object": {
+            "@type": "Thing",
+            "name": "Local Businesses"
+          }
+        }
+      ],
       "publisher": {
         "@type": "Organization",
         "name": "Intelysia",
-        "url": "https://intelysia.com"
+        "url": "https://www.intelysia.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.intelysia.com/intelysia-logo.png",
+          "width": 300,
+          "height": 100
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+229 0148656640",
+          "email": "intelysiaapp@gmail.com",
+          "contactType": "Customer Service",
+          "availableLanguage": ["English", "French"],
+          "hoursAvailable": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              "opens": "09:00",
+              "closes": "18:00"
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": "Saturday", 
+              "opens": "10:00",
+              "closes": "16:00"
+            }
+          ]
+        },
+        "sameAs": [
+          "https://instagram.com/intelysia",
+          "https://facebook.com/intelysia", 
+          "https://twitter.com/intelysia",
+          "https://linkedin.com/company/intelysia",
+          "https://youtube.com/@intelysia"
+        ]
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Featured Business Categories",
+        "description": "Top business categories in Cotonou and Benin Republic",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Restaurants in Cotonou",
+            "url": "https://www.intelysia.com/category/Restaurants"
+          },
+          {
+            "@type": "ListItem", 
+            "position": 2,
+            "name": "Hotels in Cotonou",
+            "url": "https://www.intelysia.com/category/Hotels"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3, 
+            "name": "Professional Services",
+            "url": "https://www.intelysia.com/category/Services"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "Shopping Centers",
+            "url": "https://www.intelysia.com/category/Shopping"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "name": "Healthcare Services",
+            "url": "https://www.intelysia.com/category/Health"
+          }
+        ]
       }
+    }
+    </script>
+    
+    <!-- FAQ Schema for AI Search Engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Intelysia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Intelysia is Benin Republic's premier local business directory, helping people discover the best restaurants, shops, services, and businesses in Cotonou and across Benin. We connect customers with trusted local businesses."
+          }
+        },
+        {
+          "@type": "Question", 
+          "name": "How do I find businesses in Cotonou?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Simply visit Intelysia.com and search by business name, category, or location. You can browse categories like restaurants, hotels, services, and shopping, or use our search function to find specific businesses in Cotonou and other Benin cities."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Intelysia free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer", 
+            "text": "Yes, Intelysia is completely free for customers to search and discover local businesses. Business owners can also list their businesses for free, with premium features available for enhanced visibility."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What areas does Intelysia cover?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Intelysia covers all major cities and regions across Benin Republic, with the largest concentration of businesses in Cotonou, Porto-Novo, Parakou, and Abomey. We serve the entire country with local business information."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I contact Intelysia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You can contact Intelysia by phone at +229 0148656640, email us at intelysiaapp@gmail.com, or find us on social media @intelysia. We're available Monday to Friday 9 AM to 6 PM, and Saturday 10 AM to 4 PM."
+          }
+        }
+      ]
     }
     </script>
   </head>
