@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import SEOHead from '../components/SEO/SEOHead';
 import Hero from '../components/home/Hero';
 import BusinessGrid from '../components/home/BusinessGrid';
@@ -9,12 +9,16 @@ import BusinessByLocation from '../components/home/BusinessByLocation';
 import PopularSearches from '../components/home/PopularSearches';
 import { useRealBusinessData } from '../hooks/useRealBusinessData';
 import { ProcessedBusiness } from '../utils/csvDataLoader';
+import { getLanguageFromPath, generateHreflangUrls } from '../i18n';
+import { FRENCH_HOMEPAGE_CONTENT } from '../utils/frenchContentGenerator';
 const HomePage: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const { businesses, loading, error, usingFallback, getByCategory, getByLocation, getByCategoryAndLocation } = useRealBusinessData();
   const [filteredBusinesses, setFilteredBusinesses] = useState<ProcessedBusiness[]>([]);
   const categoryParam = searchParams.get('category');
   const locationParam = searchParams.get('location');
+  const currentLanguage = getLanguageFromPath(location.pathname);
   
   useEffect(() => {
     const filterBusinesses = async () => {
@@ -41,13 +45,25 @@ const HomePage: React.FC = () => {
     
     filterBusinesses();
   }, [categoryParam, locationParam, businesses, getByCategory, getByLocation, getByCategoryAndLocation]);
-  const pageTitle = categoryParam && categoryParam !== 'All' 
-    ? `${categoryParam} Businesses in Cotonou | Intelysia Business Directory`
-    : 'Intelysia - Cotonou Business Directory | Find Local Businesses in Benin';
+  // Generate content based on language
+  const pageTitle = currentLanguage === 'fr' 
+    ? (categoryParam && categoryParam !== 'All' 
+        ? `Entreprises ${categoryParam} à Cotonou | Répertoire d'Entreprises Intelysia`
+        : 'Intelysia - Répertoire d\'Entreprises Cotonou | Trouvez les Meilleures Entreprises au Bénin')
+    : (categoryParam && categoryParam !== 'All' 
+        ? `${categoryParam} Businesses in Cotonou | Intelysia Business Directory`
+        : 'Intelysia - Cotonou Business Directory | Find Local Businesses in Benin');
   
-  const description = categoryParam && categoryParam !== 'All'
-    ? `Find the best ${categoryParam.toLowerCase()} businesses in Cotonou, Benin. Browse verified local ${categoryParam.toLowerCase()} services, read reviews, and get contact information.`
-    : 'Discover the best businesses in Cotonou, Benin. Find restaurants, shops, services, and more in your local area. Connect with trusted local businesses today.';
+  const description = currentLanguage === 'fr'
+    ? (categoryParam && categoryParam !== 'All'
+        ? `Trouvez les meilleures entreprises ${categoryParam.toLowerCase()} à Cotonou, Bénin. Parcourez les services locaux vérifiés, lisez les avis et obtenez les coordonnées.`
+        : 'Découvrez les meilleures entreprises à Cotonou, Bénin. Trouvez restaurants, boutiques, services et plus dans votre région. Connectez-vous avec des entreprises locales de confiance.')
+    : (categoryParam && categoryParam !== 'All'
+        ? `Find the best ${categoryParam.toLowerCase()} businesses in Cotonou, Benin. Browse verified local ${categoryParam.toLowerCase()} services, read reviews, and get contact information.`
+        : 'Discover the best businesses in Cotonou, Benin. Find restaurants, shops, services, and more in your local area. Connect with trusted local businesses today.');
+  
+  // Generate hreflang URLs
+  const hreflangUrls = generateHreflangUrls(location.pathname);
   
   const keywords = categoryParam && categoryParam !== 'All'
     ? `${categoryParam} Cotonou, ${categoryParam} Benin, ${categoryParam} businesses, local ${categoryParam}, Cotonou ${categoryParam} directory`
@@ -116,8 +132,11 @@ const HomePage: React.FC = () => {
         title={pageTitle}
         description={description}
         keywords={keywords}
-        canonicalUrl="https://intelysia.com/"
+        canonicalUrl={currentLanguage === 'fr' ? "https://intelysia.com/fr/" : "https://intelysia.com/"}
         structuredData={structuredData}
+        language={currentLanguage}
+        hreflang={hreflangUrls}
+        pageType="home"
       />
       {usingFallback && (
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
@@ -139,7 +158,17 @@ const HomePage: React.FC = () => {
       )}
       <Hero />
       <CategorySection />
-      <BusinessGrid businesses={filteredBusinesses} title={categoryParam && categoryParam !== 'All' ? `${categoryParam} in Cotonou` : 'Featured Businesses in Benin'} />
+      <BusinessGrid 
+        businesses={filteredBusinesses} 
+        title={currentLanguage === 'fr' 
+          ? (categoryParam && categoryParam !== 'All' 
+              ? `Entreprises ${categoryParam} à Cotonou` 
+              : 'Entreprises Recommandées au Bénin')
+          : (categoryParam && categoryParam !== 'All' 
+              ? `${categoryParam} in Cotonou` 
+              : 'Featured Businesses in Benin')
+        } 
+      />
       {/* Add the BusinessByLocation component before MapView */}
       <BusinessByLocation />
       <MapView businesses={filteredBusinesses} />
@@ -149,18 +178,21 @@ const HomePage: React.FC = () => {
       <section className="py-16 bg-blue-600">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Own a Business in Cotonou?
+            {currentLanguage === 'fr' 
+              ? 'Vous avez une Entreprise à Cotonou ?' 
+              : 'Own a Business in Cotonou?'}
           </h2>
           <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
-            Join our directory to increase your visibility and connect with more
-            customers.
+            {currentLanguage === 'fr'
+              ? 'Rejoignez notre répertoire pour augmenter votre visibilité et vous connecter avec plus de clients.'
+              : 'Join our directory to increase your visibility and connect with more customers.'}
           </p>
           <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <a href="/claim-business" className="px-8 py-3 bg-white text-blue-600 font-medium rounded-md hover:bg-gray-100 transition">
-              Claim Your Business
+            <a href={currentLanguage === 'fr' ? '/fr/claim-business' : '/claim-business'} className="px-8 py-3 bg-white text-blue-600 font-medium rounded-md hover:bg-gray-100 transition">
+              {currentLanguage === 'fr' ? 'Revendiquer Votre Entreprise' : 'Claim Your Business'}
             </a>
-            <a href="/contact" className="px-8 py-3 border border-white text-white font-medium rounded-md hover:bg-blue-700 transition">
-              Contact Us
+            <a href={currentLanguage === 'fr' ? '/fr/contact' : '/contact'} className="px-8 py-3 border border-white text-white font-medium rounded-md hover:bg-blue-700 transition">
+              {currentLanguage === 'fr' ? 'Nous Contacter' : 'Contact Us'}
             </a>
           </div>
         </div>

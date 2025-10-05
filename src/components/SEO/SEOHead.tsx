@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { CONTACT_INFO, getOrganizationSchema, getSocialMediaUrls } from '../../utils/contactInfo';
+import { generateFrenchSEOTags } from '../../utils/frenchContentGenerator';
 
 interface SEOHeadProps {
   title: string;
@@ -18,6 +19,9 @@ interface SEOHeadProps {
   author?: string;
   section?: string;
   tags?: string[];
+  category?: string;
+  location?: string;
+  pageType?: 'home' | 'category' | 'about' | 'contact' | 'business' | 'article';
 }
 
 const SEOHead: React.FC<SEOHeadProps> = ({
@@ -35,23 +39,40 @@ const SEOHead: React.FC<SEOHeadProps> = ({
   modifiedTime,
   author,
   section,
-  tags = []
+  tags = [],
+  category,
+  location,
+  pageType
 }) => {
-  const fullTitle = title.includes('Intelysia') ? title : `${title} | Intelysia - Benin Republic Business Directory`;
+  // Generate French SEO content if needed
+  const frenchSEO = language === 'fr' && pageType ? 
+    generateFrenchSEOTags(pageType, category, location) : null;
+  
+  // Use French SEO content if available and language is French
+  const finalTitle = language === 'fr' && frenchSEO ? 
+    frenchSEO.title : 
+    (title.includes('Intelysia') ? title : `${title} | Intelysia - ${language === 'fr' ? 'Répertoire d\'Entreprises du Bénin' : 'Benin Republic Business Directory'}`);
+  
+  const finalDescription = language === 'fr' && frenchSEO ? frenchSEO.description : description;
+  
   const socialMediaUrls = getSocialMediaUrls();
   const organizationSchema = getOrganizationSchema();
   
   // Enhanced keywords with Cotonou and Benin focus
-  const enhancedKeywords = keywords 
-    ? `${keywords}, Cotonou businesses, Benin Republic directory, local businesses Cotonou, business directory Benin, find businesses Cotonou`
-    : 'Cotonou businesses, Benin Republic directory, local businesses, business directory, restaurants Cotonou, services Benin';
+  const baseKeywords = language === 'fr' && frenchSEO ? 
+    frenchSEO.keywords.join(', ') :
+    (keywords || 'Cotonou businesses, Benin Republic directory, local businesses, business directory');
+    
+  const enhancedKeywords = language === 'fr' ? 
+    `${baseKeywords}, entreprises Cotonou, répertoire Bénin, entreprises locales Cotonou, annuaire entreprises Bénin, trouver entreprises Cotonou` :
+    `${baseKeywords}, Cotonou businesses, Benin Republic directory, local businesses Cotonou, business directory Benin, find businesses Cotonou`;
 
   return (
     <Helmet>
       {/* Primary Meta Tags - Enhanced for AI Search */}
-      <title>{fullTitle}</title>
-      <meta name="title" content={fullTitle} />
-      <meta name="description" content={description} />
+      <title>{finalTitle}</title>
+      <meta name="title" content={finalTitle} />
+      <meta name="description" content={finalDescription} />
       <meta name="keywords" content={enhancedKeywords} />
       <meta name="robots" content={noIndex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'} />
       <meta name="author" content={author || 'Intelysia Business Directory'} />
@@ -81,8 +102,8 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       
       {/* Enhanced Open Graph */}
       <meta property="og:type" content={type} />
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
+      <meta property="og:title" content={finalTitle} />
+      <meta property="og:description" content={finalDescription} />
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
@@ -109,15 +130,15 @@ const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@intelysia" />
       <meta name="twitter:creator" content="@intelysia" />
-      <meta name="twitter:title" content={fullTitle} />
-      <meta name="twitter:description" content={description} />
+      <meta name="twitter:title" content={finalTitle} />
+      <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={ogImage} />
       <meta name="twitter:image:alt" content={`${title} - Intelysia Business Directory`} />
       
       {/* AI Search Engine Optimization */}
-      <meta name="description" content={description} />
-      <meta name="abstract" content={description} />
-      <meta name="summary" content={description} />
+      <meta name="description" content={finalDescription} />
+      <meta name="abstract" content={finalDescription} />
+      <meta name="summary" content={finalDescription} />
       <meta name="classification" content="Business Directory" />
       <meta name="category" content="Local Business, Directory, Benin Republic, Cotonou" />
       <meta name="coverage" content="Worldwide" />

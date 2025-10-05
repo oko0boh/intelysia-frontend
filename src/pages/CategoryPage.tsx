@@ -409,12 +409,12 @@ const CategoryPage: React.FC = () => {
 
   const seoData = generateAdvancedSEO();
 
-  // Generate AI search optimization schemas
-  const searchResultSchema = generateSearchResultSchema(
-    filteredBusinesses,
-    `${category} businesses in ${selectedLocation === 'all' ? 'Benin Republic' : selectedLocation}`,
-    filteredBusinesses.length
-  );
+  // Generate AI search optimization schemas (unused but kept for future implementation)
+  // const searchResultSchema = generateSearchResultSchema(
+  //   filteredBusinesses,
+  //   `${category} businesses in ${selectedLocation === 'all' ? 'Benin Republic' : selectedLocation}`,
+  //   filteredBusinesses.length
+  // );
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -426,7 +426,7 @@ const CategoryPage: React.FC = () => {
         structuredData={seoData.structuredData}
         type="business"
         section={category}
-        tags={[category || '', selectedLocation !== 'all' ? selectedLocation : 'Benin Republic', 'business directory', 'local services']}
+        tags={category ? [category, selectedLocation !== 'all' ? selectedLocation : 'Benin Republic', 'business directory', 'local services'] : ['business directory', 'local services']}
       />
       
       {/* AI Search & Voice Search Optimization */}

@@ -9,12 +9,12 @@ export const generateAIOptimizedBusinessSchema = (business: ProcessedBusiness, c
   const baseSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": `${CONTACT_INFO.website}/business/${business.place_id}`,
+    "@id": `${CONTACT_INFO.website}/business/${business.id}`,
     "name": business.name,
     "description": business.description || `Professional ${category || 'business'} services in ${business.address.split(',').pop()?.trim() || 'Cotonou'}, Benin Republic.`,
-    "url": `${CONTACT_INFO.website}/business/${business.place_id}`,
+    "url": `${CONTACT_INFO.website}/business/${business.id}`,
     "telephone": business.phone,
-    "email": business.email,
+    "email": business.phone, // Using phone as fallback since email property doesn't exist
     "address": {
       "@type": "PostalAddress",
       "streetAddress": business.address,
@@ -30,8 +30,8 @@ export const generateAIOptimizedBusinessSchema = (business: ProcessedBusiness, c
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": business.lat || 6.3703,
-      "longitude": business.lng || 2.3912
+      "latitude": business.coordinates?.lat || 6.3703,
+      "longitude": business.coordinates?.lng || 2.3912
     },
     "areaServed": [
       {
@@ -46,7 +46,7 @@ export const generateAIOptimizedBusinessSchema = (business: ProcessedBusiness, c
       }
     ],
     "openingHours": business.hours || "Mo-Fr 09:00-18:00",
-    "priceRange": business.price_level ? "€".repeat(business.price_level) : "€€",
+    "priceRange": "€€",
     "currenciesAccepted": "XOF",
     "paymentAccepted": ["Cash", "Mobile Money", "Bank Transfer"],
     "aggregateRating": business.rating ? {
@@ -78,7 +78,7 @@ export const generateAIOptimizedBusinessSchema = (business: ProcessedBusiness, c
       ...baseSchema,
       "@type": "Restaurant",
       "servesCuisine": ["Beninese", "West African", "International"],
-      "menu": `${CONTACT_INFO.website}/business/${business.place_id}#menu`,
+      "menu": `${CONTACT_INFO.website}/business/${business.id}#menu`,
       "acceptsReservations": true,
       "hasDeliveryService": true,
       "hasTakeAway": true,

@@ -189,7 +189,7 @@ const VoiceSearchOptimizer: React.FC<VoiceSearchOptimizerProps> = ({
             "position": index + 1,
             "item": {
               "@type": "LocalBusiness",
-              "@id": `https://www.intelysia.com/business/${business.place_id}`,
+              "@id": `https://www.intelysia.com/business/${business.id}`,
               "name": business.name,
               "description": business.description || `Professional ${category.toLowerCase()} services in ${location}, Benin Republic`,
               "address": {
@@ -199,7 +199,7 @@ const VoiceSearchOptimizer: React.FC<VoiceSearchOptimizerProps> = ({
                 "addressCountry": "BJ"
               },
               "telephone": business.phone,
-              "url": `https://www.intelysia.com/business/${business.place_id}`,
+              "url": `https://www.intelysia.com/business/${business.id}`,
               "aggregateRating": business.rating ? {
                 "@type": "AggregateRating",
                 "ratingValue": business.rating,
@@ -207,7 +207,7 @@ const VoiceSearchOptimizer: React.FC<VoiceSearchOptimizerProps> = ({
                 "bestRating": 5
               } : undefined,
               "openingHours": business.hours || "Mo-Fr 09:00-18:00",
-              "priceRange": business.price_level ? "€".repeat(business.price_level) : "€€",
+              "priceRange": "€€",
               "knowsLanguage": ["French", "English"],
               "paymentAccepted": ["Cash", "Mobile Money"],
               "currenciesAccepted": "XOF"

@@ -1,7 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { MapPin, Phone, Star, ExternalLink } from 'lucide-react';
 import { ProcessedBusiness } from '../../utils/csvDataLoader';
+import { enhanceBusinessWithFrench, getLocalizedDescription, getLocalizedCategory, EnhancedBusiness } from '../../utils/businessEnhancer';
+import { getLanguageFromPath } from '../../i18n';
+import { t } from '../../i18n';
 
 interface BusinessGridProps {
   businesses: ProcessedBusiness[];
@@ -12,18 +15,43 @@ const BusinessGrid: React.FC<BusinessGridProps> = ({
   businesses,
   title = 'Featured Businesses'
 }) => {
+  const location = useLocation();
+  const currentLanguage = getLanguageFromPath(location.pathname);
+  
+  // Enhance businesses with French content
+  const enhancedBusinesses: EnhancedBusiness[] = businesses.map(business => 
+    enhanceBusinessWithFrench(business)
+  );
+  
+  // Get localized title
+  const getLocalizedTitle = () => {
+    if (currentLanguage === 'fr') {
+      if (title === 'Featured Businesses') {
+        return 'Entreprises Recommandées';
+      }
+      if (title.includes('in Cotonou')) {
+        return title.replace('in Cotonou', 'à Cotonou');
+      }
+      if (title.includes('in Benin')) {
+        return title.replace('in Benin', 'au Bénin');
+      }
+    }
+    return title;
+  };
   return (
     <section className="py-12">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl md:text-3xl font-bold mb-8 text-gray-800">
-          {title}
+          {getLocalizedTitle()}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {businesses.map(business => {
+          {enhancedBusinesses.map(business => {
             const businessSlug = business.name.toLowerCase()
               .replace(/[^a-z0-9]+/g, '-')
               .replace(/^-+|-+$/g, '');
-            const businessUrl = `/business/${business.id}/${businessSlug}`;
+            const businessUrl = currentLanguage === 'fr' ? 
+              `/fr/business/${business.id}/${businessSlug}` : 
+              `/business/${business.id}/${businessSlug}`;
             
             return (
               <div key={business.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -43,11 +71,11 @@ const BusinessGrid: React.FC<BusinessGridProps> = ({
                     </Link>
                     <div className="flex flex-col items-end space-y-1">
                       <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-semibold rounded">
-                        {business.category}
+                        {getLocalizedCategory(business, currentLanguage)}
                       </span>
                       {business.hasEnrichedData && (
                         <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded">
-                          ✓ Verified
+                          ✓ {currentLanguage === 'fr' ? 'Vérifié' : 'Verified'}
                         </span>
                       )}
                     </div>
@@ -60,7 +88,7 @@ const BusinessGrid: React.FC<BusinessGridProps> = ({
                       />
                     ))}
                     <span className="ml-2 text-sm text-gray-600">
-                      {business.rating} ({business.reviews} reviews)
+                      {business.rating} ({business.reviews} {currentLanguage === 'fr' ? 'avis' : 'reviews'})
                     </span>
                   </div>
                   <div className="mb-3 flex items-start">
@@ -77,11 +105,11 @@ const BusinessGrid: React.FC<BusinessGridProps> = ({
                         className="flex items-center text-sm text-gray-700 hover:text-blue-600"
                       >
                         <Phone className={`h-4 w-4 mr-1 ${business.enrichedPhones?.length > 0 ? 'text-green-600' : ''}`} /> 
-                        Call
+                        {currentLanguage === 'fr' ? 'Appeler' : 'Call'}
                       </a>
                     ) : (
                       <span className="flex items-center text-sm text-gray-400">
-                        <Phone className="h-4 w-4 mr-1" /> No Phone
+                        <Phone className="h-4 w-4 mr-1" /> {currentLanguage === 'fr' ? 'Pas de Téléphone' : 'No Phone'}
                       </span>
                     )}
                     
@@ -94,16 +122,16 @@ const BusinessGrid: React.FC<BusinessGridProps> = ({
                         className="flex items-center text-sm text-gray-700 hover:text-blue-600"
                       >
                         <ExternalLink className={`h-4 w-4 mr-1 ${business.enrichedWebsites?.length > 0 ? 'text-green-600' : ''}`} /> 
-                        Website
+                        {currentLanguage === 'fr' ? 'Site Web' : 'Website'}
                       </a>
                     ) : (
                       <span className="flex items-center text-sm text-gray-400">
-                        <ExternalLink className="h-4 w-4 mr-1" /> No Website
+                        <ExternalLink className="h-4 w-4 mr-1" /> {currentLanguage === 'fr' ? 'Pas de Site' : 'No Website'}
                       </span>
                     )}
                     
                     <Link to={businessUrl} className="text-sm font-medium text-blue-600 hover:text-blue-800">
-                      View Details
+                      {currentLanguage === 'fr' ? 'Voir Détails' : 'View Details'}
                     </Link>
                   </div>
                 </div>
@@ -114,7 +142,9 @@ const BusinessGrid: React.FC<BusinessGridProps> = ({
         {businesses.length === 0 && (
           <div className="text-center py-10">
             <p className="text-gray-600 text-lg">
-              No businesses found matching your criteria.
+              {currentLanguage === 'fr' 
+                ? 'Aucune entreprise trouvée correspondant à vos critères.'
+                : 'No businesses found matching your criteria.'}
             </p>
           </div>
         )}
