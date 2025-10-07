@@ -73,14 +73,43 @@
   ],
   "rewrites": [
     {
+      "source": "/fr/((?!api/).*)",
+      "destination": "/index.html"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ],
   "headers": [
     {
+      "source": "/fr/(.*)",
+      "headers": [
+        {
+          "key": "Content-Language",
+          "value": "fr"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
+        {
+          "key": "Content-Language",
+          "value": "en"
+        },
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
